@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05638ed583e99ad41992846b8ec19447, type: 3}
+  m_Name: PlayerConfig
+  m_EditorClassIdentifier: 
+  humanAppearance: {fileID: 11400000, guid: 8cf29fceacfcbcd499c3ed3b6f2fc856, type: 2}
+  humanMovement: {fileID: 11400000, guid: b61faf4b407fe0f45922396e5a7b2b06, type: 2}
+  humanResources: {fileID: 11400000, guid: d1f5b01f9ff27904ba5f6b3241f02d41, type: 2}
+  squidAppearance: {fileID: 11400000, guid: 37fb1b5c36175c846afe76c7585af08e, type: 2}
+  squidMovement: {fileID: 11400000, guid: 7dafbdc3e037a074489f0bc243867525, type: 2}
+  squidResources: {fileID: 11400000, guid: 21fbf416a8a4681419df321b97a9e0d7, type: 2}
