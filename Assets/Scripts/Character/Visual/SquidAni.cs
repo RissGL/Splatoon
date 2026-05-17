@@ -2,16 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SquidAni : MonoBehaviour
+public class SquidAni : AniCtrl
 {
-    // Start is called before the first frame update
-    void Start()
+    public SquidAni(Animator animator, InputDataSo inputDataSo,MoveSystem moveSystem)
+        : base(animator, inputDataSo,moveSystem)
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UpdateAnime()
     {
         
     }

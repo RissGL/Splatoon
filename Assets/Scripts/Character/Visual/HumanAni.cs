@@ -2,33 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HumanAni
+public class HumanAni: AniCtrl
 {
-    public static string HORIZONTAL = "Horizontal";
-    public static string VERTICAL = "Vertical";
+    private Transform playerTransform;
 
-    private Animator animator;
-    private InputDataSo inputData;
-
-    public HumanAni(Animator animator,InputDataSo inputDataSo)
+    public HumanAni(Animator animator,InputDataSo inputDataSo, MoveSystem moveSystem, Transform transform)
+        : base(animator, inputDataSo, moveSystem)
     {
-        this.animator = animator;
-        this.inputData = inputDataSo;
+        this.playerTransform = transform;
     }
 
-    public void Update()
+    public override void UpdateAnime()
     {
-        if (animator == null)
-        {
-            Debug.LogError("HumanAni: animator 是 null！");
-            return;
-        }
-        if (inputData == null)
-        {
-            Debug.LogError("HumanAni: inputData 是 null！");
-            return;
-        }
-        animator.SetFloat(HORIZONTAL, inputData.moveInput.x);
-        animator.SetFloat(VERTICAL, inputData.moveInput.y);
+        Vector3 velocity = moveSystem.characterController.velocity;
+
+        velocity.y = 0;
+        Vector3 localVelocity = playerTransform.InverseTransformDirection(velocity);
+
+        float maxSpeed = moveSystem.GetParamsForState(moveSystem.currentState.stateType).maxSpeed;
+
+        if (maxSpeed <= 0.01f) maxSpeed = 1f;
+
+        float horizontalTarget = localVelocity.x / maxSpeed;
+        float verticalTarget = localVelocity.z / maxSpeed;
+
+        float dampTime = 0.1f; // 过渡时间
+
+        animator.SetFloat(HORIZONTAL, horizontalTarget / maxSpeed, dampTime, Time.deltaTime);
+        animator.SetFloat(VERTICAL, verticalTarget / maxSpeed, dampTime, Time.deltaTime);
     }
 }

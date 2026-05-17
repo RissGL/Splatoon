@@ -13,9 +13,12 @@ public class PlayerController : MonoBehaviour
 
     private HumanAni humanAni;
 
+    private CharacterController characterController;
+
     private void Awake()
     {
         inputReader = GetComponent<InputReader>();
+        characterController = GetComponent<CharacterController>();
         characterAppearance = new CharacterAppearance(transform, playerConfig);
         runtimeState = Instantiate(playerRuntimeStateTemp);
         inkSystem = new InkSystem(runtimeState);
@@ -25,8 +28,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        moveSystem = new MoveSystem(inputReader.inputData, runtimeState);
-        humanAni = new HumanAni(characterAppearance.humanAnimator, inputReader.inputData);
+        moveSystem = new MoveSystem(inputReader.inputData, runtimeState,characterController);
+        humanAni = new HumanAni(characterAppearance.humanAnimator, inputReader.inputData,moveSystem,transform);
 
         ChangeToHuman();
     }
@@ -42,7 +45,7 @@ public class PlayerController : MonoBehaviour
             ChangeToHuman();
         }
 
-        humanAni.Update();
+        humanAni.UpdateAnime();
     }
 
     public void ChangeToHuman()
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
         characterAppearance.SwitchToHuman();
         inkSystem.SetResourceData(playerConfig.humanResources);
         moveSystem.SetMovementParamsSet(playerConfig.humanMovement);
+        ApplyPhysics(playerConfig.humanPhysics);
     }
 
     public void ChangeToSquid()
@@ -59,5 +63,16 @@ public class PlayerController : MonoBehaviour
         characterAppearance.SwitchToSquid();
         inkSystem.SetResourceData(playerConfig.squidResources);
         moveSystem.SetMovementParamsSet(playerConfig.squidMovement);
+        ApplyPhysics(playerConfig.squidPhysics);
+    }
+
+    private void ApplyPhysics(MorphPhysicsData physicsData)
+    {
+        if (characterController == null || physicsData == null) return;
+        characterController.height = physicsData.height;
+        characterController.radius = physicsData.radius;
+        characterController.center = physicsData.center;
+        characterController.slopeLimit = physicsData.slopeLimit;
+        characterController.stepOffset = physicsData.stepOffset;
     }
 }

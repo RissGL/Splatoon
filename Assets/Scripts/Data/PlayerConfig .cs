@@ -11,6 +11,8 @@ public class PlayerConfig : ScriptableObject
     public MovementParamsSet humanMovement;
     [Label("资源数据")]
     public MorphResourceData humanResources;
+    [Label("物理数据")]
+    public MorphPhysicsData humanPhysics;
 
     // 乌贼形态的各个数据
     [Header("乌贼数据")]
@@ -20,4 +22,6 @@ public class PlayerConfig : ScriptableObject
     public MovementParamsSet squidMovement;
     [Label("资源数据")]
     public MorphResourceData squidResources;
+    [Label("物理数据")]
+    public MorphPhysicsData squidPhysics;
 }
