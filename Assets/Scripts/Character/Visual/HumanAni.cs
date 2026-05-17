@@ -12,7 +12,7 @@ public class HumanAni: AniCtrl
         this.playerTransform = transform;
     }
 
-    public override void UpdateAnime()
+    public override void UpdateAnime(float deltaTime)
     {
         Vector3 velocity = moveSystem.characterController.velocity;
 
@@ -28,7 +28,7 @@ public class HumanAni: AniCtrl
 
         float dampTime = 0.1f; // ¹ý¶ÉÊ±¼ä
 
-        animator.SetFloat(HORIZONTAL, horizontalTarget / maxSpeed, dampTime, Time.deltaTime);
-        animator.SetFloat(VERTICAL, verticalTarget / maxSpeed, dampTime, Time.deltaTime);
+        animator.SetFloat(HORIZONTAL, horizontalTarget, dampTime, deltaTime);
+        animator.SetFloat(VERTICAL, verticalTarget, dampTime,deltaTime);
     }
 }

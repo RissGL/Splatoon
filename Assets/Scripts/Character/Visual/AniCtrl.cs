@@ -18,5 +18,5 @@ public abstract class AniCtrl
         this.moveSystem = moveSystem;
     }
 
-    public abstract void UpdateAnime();
+    public abstract void UpdateAnime(float deltaTime);
 }

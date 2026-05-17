@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveSystem
 {
-    private InputDataSo inputData;
+    public InputDataSo inputData { get; private set; }
     private PlayerRuntimeState runtimeState;
     private MovementParamsSet movementParamsSet;
 
@@ -13,11 +13,16 @@ public class MoveSystem
 
     public CharacterController characterController { get; private set; }
 
-    public MoveSystem(InputDataSo inputData, PlayerRuntimeState runtimeState,CharacterController characterController)
+    private float currentVerticalVelocity;
+    private Vector3 currentHorizontalVelocity;
+
+    public MoveSystem(InputDataSo inputData, PlayerRuntimeState runtimeState,
+        CharacterController characterController,MovementParamsSet movementParamsSet)
     {
         this.inputData = inputData;
         this.runtimeState = runtimeState;
         this.characterController = characterController;
+        this.movementParamsSet = movementParamsSet;
 
         states = new Dictionary<PlayerMovementState, MoveStateBase>() 
         {
@@ -25,7 +30,9 @@ public class MoveSystem
             {PlayerMovementState.HumanAir,new HumanAirState() }
         };
 
+        currentVerticalVelocity = 0.0f;
         currentState = states[PlayerMovementState.HumanRun];
+        currentState.OnEnter(this);
     }
 
     public void SetMovementParamsSet(MovementParamsSet set)
@@ -40,6 +47,27 @@ public class MoveSystem
 
     public void ChangeState(PlayerMovementState state) 
     {
+        currentState.OnExit(this);
         currentState=states[state];
+        currentState.OnEnter(this);
+    }
+
+    public void Update(float deltaTime)
+    {
+        currentVerticalVelocity += Physics.gravity.y*deltaTime;
+
+        currentState.OnUpdate(this,deltaTime);
+
+        if (characterController == null)
+        {
+            Debug.Log("½ÇÉ«¿ØÖÆÆ÷Îª¿Õ");
+            return;
+        }
+        characterController.Move(currentHorizontalVelocity*deltaTime);
+    }
+
+    public void SetHorizontalVelocity(Vector3 val)
+    {
+        currentHorizontalVelocity=val;
     }
 }

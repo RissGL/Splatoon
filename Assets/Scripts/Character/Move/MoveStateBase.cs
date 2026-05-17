@@ -11,7 +11,7 @@ public abstract class  MoveStateBase:IPlayerState
         parameters = moveSystem.GetParamsForState(stateType);
     }
 
-    public virtual void OnUpdate(MoveSystem moveSystem) { }
+    public virtual void OnUpdate(MoveSystem moveSystem, float deltaTime) { }
 
     public virtual void OnExit(MoveSystem moveSystem) { }
 }

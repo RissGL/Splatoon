@@ -18,7 +18,7 @@ public class HumanAirState : MoveStateBase
     {
     }
 
-    public override void OnUpdate(MoveSystem moveSystem)
+    public override void OnUpdate(MoveSystem moveSystem,float deltaTime)
     {
     }
 }

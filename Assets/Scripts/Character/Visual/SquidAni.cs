@@ -9,7 +9,7 @@ public class SquidAni : AniCtrl
     {
     }
 
-    public override void UpdateAnime()
+    public override void UpdateAnime(float deltaTime)
     {
         
     }

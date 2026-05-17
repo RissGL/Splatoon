@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        moveSystem = new MoveSystem(inputReader.inputData, runtimeState,characterController);
+        moveSystem = new MoveSystem(inputReader.inputData, runtimeState,characterController,playerConfig.humanMovement);
         humanAni = new HumanAni(characterAppearance.humanAnimator, inputReader.inputData,moveSystem,transform);
 
         ChangeToHuman();
@@ -45,7 +45,8 @@ public class PlayerController : MonoBehaviour
             ChangeToHuman();
         }
 
-        humanAni.UpdateAnime();
+        moveSystem.Update(Time.deltaTime);
+        humanAni.UpdateAnime(Time.deltaTime);
     }
 
     public void ChangeToHuman()

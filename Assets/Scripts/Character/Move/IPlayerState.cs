@@ -6,7 +6,7 @@ public interface IPlayerState
 {
     public void OnEnter(MoveSystem moveSystem);
 
-    public void OnUpdate(MoveSystem moveSystem);
+    public void OnUpdate(MoveSystem moveSystem,float deltaTime);
 
     public void OnExit(MoveSystem moveSystem);
 }
