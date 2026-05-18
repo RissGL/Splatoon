@@ -16,8 +16,8 @@ MonoBehaviour:
   - state: 0
     parameters:
       maxSpeed: 3
-      acceleration: 1
-      deceleration: 0.3
+      acceleration: 44
+      deceleration: 50
       gravityScale: 1
       jumpForce: 3
       canJump: 1
@@ -26,8 +26,8 @@ MonoBehaviour:
   - state: 1
     parameters:
       maxSpeed: 3
-      acceleration: 0.3
-      deceleration: 0.3
+      acceleration: 3
+      deceleration: 3
       gravityScale: 1
       jumpForce: 0
       canJump: 0

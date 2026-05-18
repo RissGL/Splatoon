@@ -34,6 +34,10 @@ public class MoveSystem
         currentState = states[PlayerMovementState.HumanRun];
         currentState.OnEnter(this);
     }
+    public Vector3 GetHorizontalVelocity()
+    {
+        return currentHorizontalVelocity;
+    }
 
     public void SetMovementParamsSet(MovementParamsSet set)
     {
@@ -54,20 +58,45 @@ public class MoveSystem
 
     public void Update(float deltaTime)
     {
-        currentVerticalVelocity += Physics.gravity.y*deltaTime;
+        currentVerticalVelocity += Physics.gravity.y * deltaTime;
 
-        currentState.OnUpdate(this,deltaTime);
-
-        if (characterController == null)
+        if (characterController.isGrounded && currentVerticalVelocity < 0)
         {
-            Debug.Log("½ÇÉ«¿ØÖÆÆ÷Îª¿Õ");
-            return;
+            currentVerticalVelocity = 0;
         }
-        characterController.Move(currentHorizontalVelocity*deltaTime);
+
+        currentState.OnUpdate(this, deltaTime);
+
+        Vector3 totalMotion = (currentHorizontalVelocity + Vector3.up * currentVerticalVelocity) * deltaTime;
+        characterController.Move(totalMotion);
+
+        if (IsGrounded() && currentVerticalVelocity <= 0)
+        {
+            if (currentState.stateType == PlayerMovementState.HumanAir
+                ||currentState.stateType==PlayerMovementState.SquidAir)
+            {
+                if (runtimeState.isSquid)
+                    ChangeState(PlayerMovementState.SquidSwim);
+                else
+                    ChangeState(PlayerMovementState.HumanRun);
+            }
+        }
     }
+
+    public void SetVerticalVelocity(float value) 
+    {
+        currentVerticalVelocity=value;
+    }
+
 
     public void SetHorizontalVelocity(Vector3 val)
     {
+
         currentHorizontalVelocity=val;
+    }
+
+    public bool IsGrounded()
+    {
+        return characterController.isGrounded;
     }
 }

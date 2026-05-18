@@ -208,8 +208,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.16000484, y: 0.036806736, z: -0.0059902794, w: 0.9864116}
-  m_LocalPosition: {x: 0.33301353, y: 1.6421092, z: -1.9892969}
+  m_LocalRotation: {x: 0.29911658, y: 0.01554585, z: -0.004897185, w: 0.9540774}
+  m_LocalPosition: {x: -0.2546879, y: 6.918908, z: -9.733494}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -443,6 +443,7 @@ GameObject:
   - component: {fileID: 991849254}
   - component: {fileID: 991849253}
   - component: {fileID: 991849255}
+  - component: {fileID: 991849256}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -495,6 +496,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputDataTemplate: {fileID: 11400000, guid: a42a61a295615384e831a4d32a6d79b2, type: 2}
+--- !u!143 &991849256
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991849252}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1687642225 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5652746583314407580, guid: ad0ccb67adc0bde409605288a1f5a9a8,

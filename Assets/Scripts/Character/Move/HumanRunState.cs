@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HumanRunState : MoveStateBase
 {
-    private Vector3 currentVelocity;
 
     public HumanRunState() 
     {
@@ -14,7 +13,6 @@ public class HumanRunState : MoveStateBase
     public override void OnEnter(MoveSystem moveSystem)
     {
         base.OnEnter(moveSystem);
-        currentVelocity = Vector3.zero;
     }
 
     public override void OnExit(MoveSystem moveSystem)
@@ -24,7 +22,9 @@ public class HumanRunState : MoveStateBase
 
     public override void OnUpdate(MoveSystem moveSystem,float deltaTime)
     {
-        Vector2 input=moveSystem.inputData.moveInput;
+        base.OnUpdate(moveSystem, deltaTime);
+
+        Vector2 input =moveSystem.inputData.moveInput;
         Vector3 inputDir = new Vector3(input.x, 0.0f, input.y);
 
         if (inputDir.magnitude > 1.0f)
