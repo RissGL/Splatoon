@@ -13,6 +13,8 @@ public class PlayerConfig : ScriptableObject
     public MorphResourceData humanResources;
     [Label("物理数据")]
     public MorphPhysicsData humanPhysics;
+    [Label("环境检测数据")]
+    public DetectionConfig humanDetection;
 
     // 乌贼形态的各个数据
     [Header("乌贼数据")]
@@ -24,4 +26,6 @@ public class PlayerConfig : ScriptableObject
     public MorphResourceData squidResources;
     [Label("物理数据")]
     public MorphPhysicsData squidPhysics;
+    [Label("环境检测数据")]
+    public DetectionConfig squidDetection;
 }

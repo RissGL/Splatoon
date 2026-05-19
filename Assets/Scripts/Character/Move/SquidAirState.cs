@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HumanRunState : MoveStateBase
+public class SquidAirState : MoveStateBase
 {
-
-    public HumanRunState() 
+    public SquidAirState()
     {
-        stateType=PlayerMovementState.HumanRun;
+        stateType = PlayerMovementState.SquidAir;
     }
 
     public override void OnEnter(MoveSystem moveSystem)
@@ -22,10 +21,10 @@ public class HumanRunState : MoveStateBase
 
     public override void OnUpdate(MoveSystem moveSystem,float deltaTime)
     {
-        base.OnUpdate(moveSystem, deltaTime);
+        base.OnUpdate(moveSystem,deltaTime);
 
         Vector3 inputDir = HandleInput(moveSystem);
 
-        base.HandleGroundMove(moveSystem, inputDir, deltaTime);
+        base.HandleAirMove(moveSystem, inputDir, deltaTime);
     }
 }

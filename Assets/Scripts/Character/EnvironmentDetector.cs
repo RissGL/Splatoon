@@ -157,7 +157,7 @@ public class EnvironmentDetector : MonoBehaviour
             if (Physics.Raycast(origin, dir, out RaycastHit hit, config.wallCheckDistance, config.wallMask))
             {
                 float angle = Vector3.Angle(Vector3.up, hit.normal);
-                if (angle < 75f) continue;   // 只允许接近垂直的墙面
+                if (angle < config.minWallAngle) continue;   // 只允许接近垂直的墙面
 
                 if (hit.distance < closestDistance)
                 {

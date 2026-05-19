@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class HumanAni: AniCtrl
 {
-    private Transform playerTransform;
 
     public HumanAni(Animator animator,InputDataSo inputDataSo, MoveSystem moveSystem, Transform transform)
-        : base(animator, inputDataSo, moveSystem)
+        : base(animator, inputDataSo, moveSystem,transform)
     {
-        this.playerTransform = transform;
     }
 
     public override void UpdateAnime(float deltaTime)

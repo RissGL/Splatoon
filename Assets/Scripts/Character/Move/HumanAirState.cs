@@ -23,22 +23,8 @@ public class HumanAirState : MoveStateBase
     {
         base.OnUpdate(moveSystem,deltaTime);
 
-        Vector2 input=moveSystem.inputData.moveInput;
-        Vector3 inputDir=new Vector3(input.x,0.0f,input.y);
+        Vector3 inputDir = HandleInput(moveSystem);
 
-        if (inputDir.magnitude > 1.0f)
-        {
-            inputDir.Normalize();
-        }
-
-
-        float targetSpeed=inputDir.magnitude*parameters.maxSpeed;
-        float accel = parameters.acceleration * parameters.airControl;
-
-        Vector3 targetVelocity = inputDir * targetSpeed;
-
-        currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, deltaTime * accel);
-
-        moveSystem.SetHorizontalVelocity(currentVelocity);
+        base.HandleAirMove(moveSystem,inputDir,deltaTime);
     }
 }

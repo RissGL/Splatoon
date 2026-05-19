@@ -16,7 +16,9 @@ MonoBehaviour:
   humanMovement: {fileID: 11400000, guid: b61faf4b407fe0f45922396e5a7b2b06, type: 2}
   humanResources: {fileID: 11400000, guid: d1f5b01f9ff27904ba5f6b3241f02d41, type: 2}
   humanPhysics: {fileID: 11400000, guid: c90e95dd0a30e2a4abebbf2b5bd58a24, type: 2}
+  humanDetection: {fileID: 11400000, guid: 05d33721a5150104894d49cc5b0e1c70, type: 2}
   squidAppearance: {fileID: 11400000, guid: 37fb1b5c36175c846afe76c7585af08e, type: 2}
   squidMovement: {fileID: 11400000, guid: 7dafbdc3e037a074489f0bc243867525, type: 2}
   squidResources: {fileID: 11400000, guid: 21fbf416a8a4681419df321b97a9e0d7, type: 2}
   squidPhysics: {fileID: 11400000, guid: 4dedffe6b2afca3468f93c0469309f7b, type: 2}
+  squidDetection: {fileID: 11400000, guid: a8d8b45685988964b85e14271a32747d, type: 2}

@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HumanRunState : MoveStateBase
+public class SquidDiveState : MoveStateBase
 {
-
-    public HumanRunState() 
+    public SquidDiveState()
     {
-        stateType=PlayerMovementState.HumanRun;
+        stateType = PlayerMovementState.SquidDive;
     }
 
     public override void OnEnter(MoveSystem moveSystem)
@@ -22,7 +21,7 @@ public class HumanRunState : MoveStateBase
 
     public override void OnUpdate(MoveSystem moveSystem,float deltaTime)
     {
-        base.OnUpdate(moveSystem, deltaTime);
+        base.OnUpdate(moveSystem,deltaTime);
 
         Vector3 inputDir = HandleInput(moveSystem);
 

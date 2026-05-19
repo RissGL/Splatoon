@@ -10,12 +10,14 @@ public abstract class AniCtrl
     protected Animator animator;
     protected InputDataSo inputData;
     protected MoveSystem moveSystem;
+    protected Transform playerTransform;
 
-    public AniCtrl(Animator animator, InputDataSo inputDataSo, MoveSystem moveSystem)
+    public AniCtrl(Animator animator, InputDataSo inputDataSo, MoveSystem moveSystem, Transform transform)
     {
         this.animator = animator;
         this.inputData = inputDataSo;
         this.moveSystem = moveSystem;
+        this.playerTransform = transform;
     }
 
     public abstract void UpdateAnime(float deltaTime);

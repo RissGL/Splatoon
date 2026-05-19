@@ -25,7 +25,6 @@ public class MoveSystem
         this.movementParamsSet = movementParamsSet;
 
         currentVerticalVelocity = 0.0f;
-        currentState.OnEnter(this);
         Detector = detector;
     }
 
@@ -55,6 +54,7 @@ public class MoveSystem
 
         if (Detector.IsGrounded && currentVerticalVelocity < 0)
         {
+            Debug.Log(currentVerticalVelocity);
             currentVerticalVelocity = 0;
         }
 
