@@ -14,6 +14,8 @@ public class MoveSystem
     private float currentVerticalVelocity;
     private Vector3 currentHorizontalVelocity;
 
+    public float VerticalVelocity => currentVerticalVelocity;
+
     public EnvironmentDetector Detector { get; set; }
 
     public MoveSystem(InputDataSo inputData, PlayerRuntimeState runtimeState,
@@ -54,8 +56,7 @@ public class MoveSystem
 
         if (Detector.IsGrounded && currentVerticalVelocity < 0)
         {
-            Debug.Log(currentVerticalVelocity);
-            currentVerticalVelocity = 0;
+            currentVerticalVelocity = -2f;
         }
 
         currentState.OnUpdate(this, deltaTime);

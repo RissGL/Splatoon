@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   inkMask:
     serializedVersion: 2
     m_Bits: 0
@@ -26,4 +26,4 @@ MonoBehaviour:
     m_Bits: 0
   groundCheckDistance: 0.1
   wallCheckDistance: 0.6
-  slopeLimit: 45
+  minWallAngle: 75

@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour
             if (detector != null && !detector.IsGrounded)
             {
                 PlayerMovementState airState = runtimeState.isSquid ? PlayerMovementState.SquidAir : PlayerMovementState.HumanAir;
+                Debug.Log("Auto-correcting to air state: " + airState);
                 ChangeState(airState);
             }
         }
@@ -156,20 +157,24 @@ public class PlayerController : MonoBehaviour
         bool isGroundState = (state == PlayerMovementState.HumanRun ||
                               state == PlayerMovementState.SquidFlop ||
                               state == PlayerMovementState.SquidDive);
-        if (!isGroundState) return;
+        if (!isGroundState) 
+        {
+            Debug.Log("Jump pressed but not in a ground state: " + state);
+            return;
+        }
 
         if (detector == null || !detector.IsGrounded) return;
 
+        Debug.Log("Jump pressed in state: " + state);
+        var p = moveSystem.GetParamsForState(currentState.stateType);
+
         if (!runtimeState.isSquid)
         {
-            var p = moveSystem.GetParamsForState(PlayerMovementState.HumanAir);
-            Debug.Log($"Jump Force: {p.jumpForce}");
             moveSystem.SetVerticalVelocity(p.jumpForce);
             ChangeState(PlayerMovementState.HumanAir);
         }
         else
         {
-            var p = moveSystem.GetParamsForState(PlayerMovementState.SquidAir);
             moveSystem.SetVerticalVelocity(p.jumpForce);
             ChangeState(PlayerMovementState.SquidAir);
         }
@@ -270,12 +275,17 @@ public class PlayerController : MonoBehaviour
         if (detector == null) return;
 
         bool isGrounded = detector.IsGrounded;
-        if (isGrounded && !wasGroundedLastFrame
+
+        bool isFalling = moveSystem.VerticalVelocity <= 0.1f;
+
+        // 只要当前是空中状态，且碰到了地面，且没有在往天上飞，就强制落地
+        if (isGrounded && isFalling
             && (currentState.stateType == PlayerMovementState.HumanAir
                 || currentState.stateType == PlayerMovementState.SquidAir))
         {
             OnLanded();
         }
+
         wasGroundedLastFrame = isGrounded;
     }
 

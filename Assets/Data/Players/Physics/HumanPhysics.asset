@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f48db95fd4881734993349e071b8957b, type: 3}
   m_Name: HumanPhysics
   m_EditorClassIdentifier: 
-  height: 1.8
+  height: 1.2
   radius: 0.3
-  center: {x: 0, y: 0.9, z: 0}
+  center: {x: 0, y: 0.63, z: 0}
   slopeLimit: 45
   stepOffset: 0.3

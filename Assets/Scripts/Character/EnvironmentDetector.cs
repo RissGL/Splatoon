@@ -107,24 +107,18 @@ public class EnvironmentDetector : MonoBehaviour
     /// </summary>
     private void CheckGround()
     {
-        if (characterController.isGrounded)
-        {
-            Vector3 origin = transform.position + characterController.center;
-            float dist = characterController.height / 2 + 0.1f;
+        Vector3 origin = transform.position + characterController.center;
 
-            if (Physics.SphereCast(origin, characterController.radius, Vector3.down, out groundHit, dist, config.groundMask))
-            {
-                IsGrounded = true;
-                GroundNormal = groundHit.normal;
-                CurrentGround = groundHit.collider;
-                groundHitValid = true;
-            }
-            else
-            {
-                IsGrounded = false;
-                CurrentGround = null;
-                groundHitValid = false;
-            }
+        // 注意：如果是从胶囊体中心往下打球形射线，距离应该是 height/2 减去 radius，再加一点点余量
+        // 否则球体会从胶囊体下半部分的外面开始打，可能会穿透地板
+        float dist = (characterController.height / 2f) - characterController.radius + config.groundCheckDistance;
+
+        if (Physics.SphereCast(origin, characterController.radius, Vector3.down, out groundHit, dist, config.groundMask))
+        {
+            IsGrounded = true;
+            GroundNormal = groundHit.normal;
+            CurrentGround = groundHit.collider;
+            groundHitValid = true;
         }
         else
         {

@@ -21,7 +21,7 @@ public class InputReader : MonoBehaviour
         inputActions.Player1.Jump.performed += ctx => inputData.RaiseJump();
 
         // 乌贼输入
-        inputActions.Player1.Squid.performed += ctx => inputData.RaiseSquidToggle(true);
+        inputActions.Player1.Squid.performed += ctx =>inputData.RaiseSquidToggle(true);
         inputActions.Player1.Squid.canceled += ctx => inputData.RaiseSquidToggle(false);
 
         // 射击输入：只触发事件，传递 true/false
