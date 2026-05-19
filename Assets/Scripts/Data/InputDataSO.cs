@@ -10,15 +10,19 @@ public class InputDataSo :ScriptableObject
     public bool shootInput;
 
     [Header("˲ʱ״̬")]
-    public Action jumpEvent;
+    public Action OnJumpPressed;
+    public Action<bool> OnSquidToggled;
+    public Action<bool> OnShootToggled;
 
-    public void RaiseJump()=> jumpEvent?.Invoke();
+    public void RaiseJump()=> OnJumpPressed?.Invoke();
+    public void RaiseSquidToggle(bool pressed) => OnSquidToggled?.Invoke(pressed);
+    public void RaiseShootToggle(bool pressed) => OnShootToggled?.Invoke(pressed);
 
     private void OnDisable()
     {
         moveInput = Vector2.zero;
         squidInput = false;
         shootInput = false;
-        jumpEvent = null;
+        OnJumpPressed = null;
     }
 }

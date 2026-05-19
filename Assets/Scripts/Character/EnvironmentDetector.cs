@@ -47,6 +47,18 @@ public class EnvironmentDetector : MonoBehaviour
     private bool groundHitValid;
     private bool wallHitValid;
 
+    //环境事件：当状态发生变化时触发，供状态机监听以切换状态或播放特效等
+    public event System.Action OnEnteredAllyInk;
+    public event System.Action OnExitedAllyInk;
+    public event System.Action OnEnteredEnemyInk;
+    public event System.Action OnExitedEnemyInk;
+    public event System.Action<Vector3> OnWallDetected;  // 携带法线
+    public event System.Action OnWallLost;
+
+    private bool wasOnAllyInk;
+    private bool wasOnWall;
+
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -58,6 +70,20 @@ public class EnvironmentDetector : MonoBehaviour
     public void SetController(CharacterController cc) => characterController = cc;
     /// <summary>注入己方墨水颜色</summary>
     public void SetAllyInkColor(Color color) => allyInkColor = color;
+
+    private void Update()
+    {
+        DetectEnvironment();
+
+        if (IsOnAllyInk && !wasOnAllyInk) OnEnteredAllyInk?.Invoke();
+        if (!IsOnAllyInk && wasOnAllyInk) OnExitedAllyInk?.Invoke();
+        if (IsNearAllyInkWall && !wasOnWall) OnWallDetected?.Invoke(AllyInkWallNormal);
+        if (!IsNearAllyInkWall && wasOnWall) OnWallLost?.Invoke();
+
+        wasOnAllyInk = IsOnAllyInk;
+        wasOnWall = IsNearAllyInkWall;
+    }
+
 
     /// <summary>
     /// 执行一次完整的环境检测，更新所有公共状态属性。

@@ -9,8 +9,6 @@ public class InputReader : MonoBehaviour
 
     private Input inputActions;
 
-    private bool isSquidButtonHeld = false;
-
     private void Awake()
     {
         inputData = Instantiate(inputDataTemplate);
@@ -22,35 +20,13 @@ public class InputReader : MonoBehaviour
         //ÌøÔ¾ÊäÈë
         inputActions.Player1.Jump.performed += ctx => inputData.RaiseJump();
 
-        //ÎÚÔôÊäÈë
-        inputActions.Player1.Squid.performed += ctx =>
-        {
-            isSquidButtonHeld = true;
-            inputData.squidInput = true; 
-        };
-        inputActions.Player1.Squid.canceled += ctx =>
-        {
-            isSquidButtonHeld = false;
-            inputData.squidInput = false;
-        };
+        // ÎÚÔôÊäÈë
+        inputActions.Player1.Squid.performed += ctx => inputData.RaiseSquidToggle(true);
+        inputActions.Player1.Squid.canceled += ctx => inputData.RaiseSquidToggle(false);
 
-        //Éä»÷ÊäÈë
-        inputActions.Player1.Shoot.performed += ctx => 
-        {
-            if (inputData.squidInput == true) 
-            {
-                inputData.squidInput = false;//Éä»÷Ê±È¡ÏûÎÚÔô×´Ì¬
-            }
-            inputData.shootInput = true;
-        };
-        inputActions.Player1.Shoot.canceled += ctx =>
-        {
-            if (isSquidButtonHeld)
-            {
-                inputData.squidInput = true;//°´×ÅÎÚÔô¼üÊ±£¬Éä»÷È¡Ïûºó»Ö¸´ÎÚÔô×´Ì¬
-            }
-            inputData.shootInput = false; 
-        };
+        // Éä»÷ÊäÈë£ºÖ»´¥·¢ÊÂ¼þ£¬´«µÝ true/false
+        inputActions.Player1.Shoot.performed += ctx => inputData.RaiseShootToggle(true);
+        inputActions.Player1.Shoot.canceled += ctx => inputData.RaiseShootToggle(false);
     }
 
     private void OnEnable()

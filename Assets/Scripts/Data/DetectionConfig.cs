@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/Detection Config")]
-public class DetectionConfig
+public class DetectionConfig : ScriptableObject
 {
     [Label("地板层")]
     public LayerMask groundMask;
