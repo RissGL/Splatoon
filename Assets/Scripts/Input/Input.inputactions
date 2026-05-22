@@ -16,6 +16,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "ef0fc664-85cb-4c97-b676-5914ae95fee9",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Squid",
                     "type": "Button",
                     "id": "3ba4cb14-c65d-4330-90a3-0a68db690ab9",
@@ -37,6 +46,24 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "c1373856-911b-4c9d-9f9a-1b69fb248f7d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Scroll",
+                    "type": "Value",
+                    "id": "f96f8133-8268-4608-8541-9f9864595aa3",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ResetCamera",
+                    "type": "Button",
+                    "id": "921b0052-2c50-486f-a0d0-355e91158aa2",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -129,6 +156,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "f479d9e8-c02f-4127-a5d9-8c0c9ba818c9",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0254fe9-1fb4-44da-b181-59bd0e946006",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74ca3902-d582-4287-ab31-f3e681066d2a",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "669978f1-fb32-4be9-af85-da3a0f0722f7",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ResetCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

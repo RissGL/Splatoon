@@ -16,7 +16,7 @@ MonoBehaviour:
   - state: 0
     parameters:
       maxSpeed: 2.5
-      acceleration: 44
+      acceleration: 100
       deceleration: 50
       gravityScale: 1
       jumpForce: 6

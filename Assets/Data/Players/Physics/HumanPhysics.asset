@@ -17,3 +17,4 @@ MonoBehaviour:
   center: {x: 0, y: 0.63, z: 0}
   slopeLimit: 45
   stepOffset: 0.3
+  cameraTargetPosition: {x: 0, y: 0, z: 0}

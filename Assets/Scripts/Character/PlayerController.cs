@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.VersionControl.Asset;
@@ -6,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerConfig playerConfig;
     [SerializeField] private PlayerRuntimeState playerRuntimeStateTemp;
+    [SerializeField] private GameObject cameraTarget;
 
     private PlayerRuntimeState runtimeState;
     private InkSystem inkSystem;
@@ -25,6 +27,9 @@ public class PlayerController : MonoBehaviour
 
     private bool isSquidButtonHeld = false;
     private bool isShootButtonHeld = false;
+
+    [Header("视角")]
+    [SerializeField] private CameraInputAdapter cameraInputAdapter;
 
     private void Awake()
     {
@@ -57,6 +62,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        cameraInputAdapter.Initialize(inputReader.inputData, transform, cameraTarget.transform);
+
         // 订阅输入事件
         inputReader.inputData.OnJumpPressed += HandleJump;
         inputReader.inputData.OnSquidToggled += HandleSquidToggle;
@@ -148,6 +155,7 @@ public class PlayerController : MonoBehaviour
         characterController.center = physicsData.center;
         characterController.slopeLimit = physicsData.slopeLimit;
         characterController.stepOffset = physicsData.stepOffset;
+        cameraTarget.transform.localPosition=physicsData.cameraTargetPosition;
     }
 
     // ——— 事件处理 ———

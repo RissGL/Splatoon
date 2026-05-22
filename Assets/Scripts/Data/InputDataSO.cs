@@ -6,6 +6,7 @@ public class InputDataSo :ScriptableObject
 {
     [Header("³ÖÐø×´Ì¬")]
     public Vector2 moveInput;
+    public Vector2 lookInput;
     public bool squidInput;
     public bool shootInput;
 
@@ -13,6 +14,7 @@ public class InputDataSo :ScriptableObject
     public Action OnJumpPressed;
     public Action<bool> OnSquidToggled;
     public Action<bool> OnShootToggled;
+    public Action OnCameraReset;
 
     public void RaiseJump()=> OnJumpPressed?.Invoke();
     public void RaiseSquidToggle(bool pressed) => OnSquidToggled?.Invoke(pressed);
@@ -21,6 +23,7 @@ public class InputDataSo :ScriptableObject
     private void OnDisable()
     {
         moveInput = Vector2.zero;
+        lookInput = Vector2.zero;
         squidInput = false;
         shootInput = false;
         OnJumpPressed = null;

@@ -17,6 +17,10 @@ public class InputReader : MonoBehaviour
         inputActions.Player1.Move.canceled += ctx=> inputData.moveInput=Vector2.zero;
         inputActions.Player1.Move.performed += ctx=> inputData.moveInput=ctx.ReadValue<Vector2>();
 
+        //ÊÓ½ÇÊäÈë
+        inputActions.Player1.Look.canceled += ctx => inputData.lookInput = Vector2.zero;
+        inputActions.Player1.Look.performed += ctx => inputData.lookInput = ctx.ReadValue<Vector2>();
+
         //ÌøÔ¾ÊäÈë
         inputActions.Player1.Jump.performed += ctx => inputData.RaiseJump();
 
