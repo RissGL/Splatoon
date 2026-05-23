@@ -1,0 +1,27 @@
+#pragma kernel CSMain
+static const int numThreads = 8;
+RWTexture2D<float4> _In;
+RWTexture2D<float4> _Out;
+
+[numthreads(numThreads,numThreads,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	int2 coord = int2(id.x, id.y);
+    float4 value = _In[coord];
+	if (value.w < 0.5) // w is 0 or 1
+	{
+		value += _In[coord + int2(-1, -1)];
+		value += _In[coord + int2(-1, 0)];
+		value += _In[coord + int2(-1, 1)];
+		value += _In[coord + int2(0, -1)];
+		value += _In[coord + int2(0, 0)];
+		value += _In[coord + int2(0, 1)];
+		value += _In[coord + int2(1, -1)];
+		value += _In[coord + int2(1, 0)];
+		value += _In[coord + int2(1, 1)];
+
+		value.xyz *= 1.0 / max(value.w, 0.00001);
+		value.w = min(value.w, 1);
+	}
+	_Out[coord] = value;
+}

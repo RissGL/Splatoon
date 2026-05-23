@@ -15,7 +15,7 @@ MonoBehaviour:
   stateMovementConfigs:
   - state: 0
     parameters:
-      maxSpeed: 2.5
+      maxSpeed: 3
       acceleration: 100
       deceleration: 50
       gravityScale: 1

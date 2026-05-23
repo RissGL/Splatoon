@@ -1,0 +1,38 @@
+#pragma kernel CSMain
+static const int numThreads = 8;
+struct SplatCommand
+{
+    float4x4 worldToLocal;
+    float4 color;
+    float4 scaleBias;
+};
+RWStructuredBuffer<SplatCommand> _SplatCommands;
+int _CommandCount;
+Texture2D<float4> _WorldPosTex;
+RWTexture2D<float4> _SplatTex;
+sampler2D _SplatTexture;
+
+[numthreads(numThreads,numThreads,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float4 worldPos = _WorldPosTex[id.xy];
+    float4 currentSplat = _SplatTex[id.xy];
+
+    for(int i = 0; i < _CommandCount; i++)
+    {
+        float3 localPos = mul(_SplatCommands[i].worldToLocal, float4(worldPos.xyz, 1)).xyz;
+        if (localPos.x > -0.5 && localPos.x < 0.5 && localPos.y > -0.5 && localPos.y < 0.5 && localPos.z > -0.5 && localPos.z < 0.5)
+		{
+			// generate splat uvs
+			float4 uv = float4(saturate(localPos.xz + 0.5), 0, 0);
+			uv.xy *= _SplatCommands[i].scaleBias.xy;
+			uv.xy += _SplatCommands[i].scaleBias.zw;
+		
+			// sample the texture (maybe 2d sdf)
+			float newSplatTex = tex2Dlod(_SplatTexture, uv).r;
+			currentSplat = lerp(currentSplat, _SplatCommands[i].color, newSplatTex);
+		}
+    }
+
+	_SplatTex[id.xy] = currentSplat * worldPos.w;
+}

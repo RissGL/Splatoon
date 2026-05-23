@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CameraInputAdapter : MonoBehaviour
 {
-    private Camera camera;
     private InputDataSo InputData;
 
     [Header("旋转目标")]
@@ -27,7 +26,6 @@ public class CameraInputAdapter : MonoBehaviour
 
     private void Awake()
     {
-        camera = GetComponent<Camera>();
         if (virtualCamera != null)
             followComponent = virtualCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
 
@@ -47,6 +45,12 @@ public class CameraInputAdapter : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (InputData == null)
+        {
+            Debug.Log("InputData为空");
+            return;
+        }
+
         Vector2 lookInput= InputData.lookInput;
 
         currentYaw += lookInput.x * lookSensitivity * Time.deltaTime;
@@ -62,12 +66,9 @@ public class CameraInputAdapter : MonoBehaviour
 
         cameraTarget.localRotation = Quaternion.Euler(currentPitch, 0f, 0f);
 
-        if (followComponent != null)
-        {
-            float pitchRatio = Mathf.InverseLerp(minPitch, maxPitch, currentPitch); 
-                                                                                   
-            float distance = Mathf.Lerp(1.5f, 6.0f, pitchRatio); 
-            followComponent.CameraDistance = distance;
-        }
+        float pitchRatio = Mathf.InverseLerp(minPitch, maxPitch, currentPitch);
+
+        float distance = Mathf.Lerp(1.5f, 6.0f, pitchRatio);
+        followComponent.CameraDistance = distance;
     }
 }

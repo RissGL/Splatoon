@@ -56,7 +56,7 @@ public class MoveSystem
 
         if (Detector.IsGrounded && currentVerticalVelocity < 0)
         {
-            currentVerticalVelocity = -2f;
+            currentVerticalVelocity = 0f;
         }
 
         currentState.OnUpdate(this, deltaTime);

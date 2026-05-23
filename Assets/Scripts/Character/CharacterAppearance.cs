@@ -12,12 +12,17 @@ public class CharacterAppearance
     public Animator humanAnimator { get; private set; }
     public Animator squidAnimator { get; private set; }
 
-    public CharacterAppearance(Transform modelContainer,PlayerConfig playerConfig)
+    public CharacterAppearance(Transform modelContainer,PlayerConfig playerConfig,
+        GameObject humanModel,GameObject squidModel)
     {
         this.modelContainer = modelContainer;
 
-        humanModelInstance = GameObject.Instantiate(playerConfig.humanAppearance.appearanceModel, modelContainer);
-        squidModelInstance = GameObject.Instantiate(playerConfig.squidAppearance.appearanceModel, modelContainer);
+        //humanModelInstance = GameObject.Instantiate(playerConfig.humanAppearance.appearanceModel, modelContainer);
+        //squidModelInstance = GameObject.Instantiate(playerConfig.squidAppearance.appearanceModel, modelContainer);
+
+
+        this.humanModelInstance = humanModel;
+        this.squidModelInstance = squidModel;
 
         humanModelInstance.SetActive(true);
         squidModelInstance.SetActive(false);

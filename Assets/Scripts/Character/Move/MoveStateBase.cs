@@ -8,6 +8,7 @@ public abstract class  MoveStateBase:IPlayerState
     public PlayerMovementState stateType { get; protected set; }
 
     protected Vector3 currentVelocity=Vector3.zero;
+
     public virtual void OnEnter(MoveSystem moveSystem) 
     {
         parameters = moveSystem.GetParamsForState(stateType);
@@ -33,6 +34,8 @@ public abstract class  MoveStateBase:IPlayerState
         {
             inputDir.Normalize();
         }
+
+        inputDir= RotateInputDir(moveSystem, inputDir);
         return inputDir;
     }
 
@@ -58,5 +61,26 @@ public abstract class  MoveStateBase:IPlayerState
         currentVelocity = Vector3.MoveTowards(currentVelocity, targetVelocity, deltaTime * accel);
 
         moveSystem.SetHorizontalVelocity(currentVelocity);
+    }
+
+    protected Vector3 RotateInputDir(MoveSystem moveSystem,Vector3 inputDir) 
+    {
+        Transform playerTransform = moveSystem.characterController.transform;
+
+        // 获取角色水平朝向
+        Vector3 forward = playerTransform.forward;
+        forward.y = 0;
+        forward.Normalize();
+
+        Vector3 right = playerTransform.right;
+        right.y = 0;
+        right.Normalize();
+
+        // 合成世界空间移动方向
+        Vector3 worldDir = (forward * inputDir.z + right * inputDir.x).normalized;
+
+        inputDir = worldDir * inputDir.magnitude;
+
+        return inputDir;
     }
 }

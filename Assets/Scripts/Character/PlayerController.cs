@@ -5,6 +5,9 @@ using static UnityEditor.VersionControl.Asset;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameObject humanModel;
+    [SerializeField] private GameObject squidModel;
+
     [SerializeField] private PlayerConfig playerConfig;
     [SerializeField] private PlayerRuntimeState playerRuntimeStateTemp;
     [SerializeField] private GameObject cameraTarget;
@@ -28,14 +31,15 @@ public class PlayerController : MonoBehaviour
     private bool isSquidButtonHeld = false;
     private bool isShootButtonHeld = false;
 
-    [Header("йс╫г")]
+    [Label("йс╫г")]
     [SerializeField] private CameraInputAdapter cameraInputAdapter;
+    private AimTargetController aimTargetController;
 
     private void Awake()
     {
         inputReader = GetComponent<InputReader>();
         characterController = GetComponent<CharacterController>();
-        characterAppearance = new CharacterAppearance(transform, playerConfig);
+        characterAppearance = new CharacterAppearance(transform, playerConfig,humanModel,squidModel);
         runtimeState = Instantiate(playerRuntimeStateTemp);
         inkSystem = new InkSystem(runtimeState);
 
@@ -58,6 +62,7 @@ public class PlayerController : MonoBehaviour
         detector.OnExitedAllyInk += HandleExitedAllyInk;
         detector.OnWallDetected += HandleWallDetected;
         detector.OnWallLost += HandleWallLost;
+
     }
 
     private void Start()
@@ -80,6 +85,9 @@ public class PlayerController : MonoBehaviour
         currentAni = humanAni;
 
         ChangeToHuman();
+
+        aimTargetController = GetComponent<AimTargetController>();
+        aimTargetController.Initialize(inputReader.inputData);
     }
     private void SetInitialState(PlayerMovementState state)
     {
