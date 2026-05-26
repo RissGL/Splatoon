@@ -6,6 +6,7 @@ public class PaintManager : MonoSingleton<PaintManager>{
 
     public Shader texturePaint;
     public Shader extendIslands;
+    [SerializeField] private Texture2D brushAtlas;
 
     private int prepareUVID = Shader.PropertyToID("_PrepareUV");
     private int positionID = Shader.PropertyToID("_PainterPosition");
@@ -17,6 +18,8 @@ public class PaintManager : MonoSingleton<PaintManager>{
     private int textureID = Shader.PropertyToID("_MainTex");
     private int uvOffsetID = Shader.PropertyToID("_OffsetUV");
     private int uvIslandsID = Shader.PropertyToID("_UVIslands");
+    private int brushTexID = Shader.PropertyToID("_BrushTex");
+    private int brushIndexID = Shader.PropertyToID("_BrushIndex");
 
     private Material paintMaterial;
     private Material extendMaterial;
@@ -66,6 +69,8 @@ public class PaintManager : MonoSingleton<PaintManager>{
         paintMaterial.SetFloat(radiusID, radius);
         paintMaterial.SetTexture(textureID, support);
         paintMaterial.SetColor(colorID, color ?? Color.red);
+        paintMaterial.SetTexture(brushTexID, brushAtlas);
+        paintMaterial.SetFloat(brushIndexID, Random.Range(0, 16));
         extendMaterial.SetFloat(uvOffsetID, paintable.extendsIslandOffset);
         extendMaterial.SetTexture(uvIslandsID, uvIslands);
 
