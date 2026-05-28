@@ -36,79 +36,82 @@ Shader "TNTC/TexturePainter_URP"
             float _PrepareUV;
             float _BrushIndex;
             
-
+            // 1. 在顶点输入中添加法线获取
             struct Attributes
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float3 normal : NORMAL; 
             };
 
+            // 2. 将世界法线传递给片元着色器
             struct Varyings
             {
                 float4 vertex : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float4 worldPos : TEXCOORD1;
+                float3 normalWS : TEXCOORD2; 
             };
 
-            float mask(float3 position, float3 center, float radius, float hardness)
+            // 获取笔刷局部 UV 的算法（已重写为支持 3D 任意表面投影）
+            float3 GetBrushLocalUV(float3 worldPos, float3 painterPos, float radius, float3 normalWS)
             {
-                float m = distance(center, position);
-                return 1.0 - smoothstep(radius * hardness, radius, m);
-            }
-
-             float3 GetBrushLocalUV(float3 worldPos, float3 painterPos, float radius)
-            {
-                // 世界空间偏移（默认XZ平面，垂直轴为Y，可根据需要修改）
+                // 计算真实的 3D 偏移
                 float3 offset = worldPos - painterPos;
-                float2 dir = float2(offset.x, offset.z);   // 改为 offset.xy 即对墙壁使用
+                
+                // 使用真正的 3D 球面距离，不再漏掉 Y 轴
+                float dist = length(offset) / max(radius, 0.0001);
 
-                // 除以半径，将范围压缩到 [-1, 1]
+                // 基于表面法线，构建局部切线空间 (Tangent Space)
+                // 这样笔刷就能根据你涂鸦的墙面朝向自动旋转贴合
+                float3 up = abs(normalWS.y) < 0.999 ? float3(0, 1, 0) : float3(1, 0, 0);
+                float3 tangent = normalize(cross(up, normalWS));
+                float3 bitangent = cross(normalWS, tangent);
+
+                // 将 3D 的球形偏移投影到这堵墙的 2D 平面上
+                float2 dir = float2(dot(offset, tangent), dot(offset, bitangent));
+
+                // 压缩到 [-1, 1]
                 float2 uvRaw = dir / max(radius, 0.0001);
-                float dist = length(uvRaw);
 
-                // 从 [-1,1] 映射到 [0,1]
+                // 从 [-1, 1] 映射到 [0, 1]
                 float2 uvLocal = uvRaw * 0.5 + 0.5;
+                
                 return float3(uvLocal, dist);
             }
 
-            // 函数2：根据局部UV和硬度、图集索引采样笔刷纹理，返回遮罩强度
             float EvaluateBrushMask(float2 uvLocal, float dist, float hardness, float brushIndex)
             {
-                // 外层软化（超出半径1.0的部分逐渐淡出，保留硬度控制）
                 float outerMask = 1.0 - smoothstep(1.0 - hardness * 0.5, 1.0 + 0.01, dist);
                 if (outerMask <= 0.0) return 0.0;
 
-                // 图集布局：4x4，共16个格子
                 const float cellsPerRow = 4.0;
                 const float cellsPerCol = 4.0;
                 float cellSizeX = 1.0 / cellsPerRow;
                 float cellSizeY = 1.0 / cellsPerCol;
 
-                // 将浮点索引钳制到 0～15
                 int idx = clamp((int)brushIndex, 0, 15);
                 int col = idx % (int)cellsPerRow;
                 int row = idx / (int)cellsPerRow;
 
-                // 计算图集采样UV
                 float2 cellOffset = float2(col * cellSizeX, row * cellSizeY);
                 float2 uvAtlas = cellOffset + uvLocal * float2(cellSizeX, cellSizeY);
 
-                // 采样笔刷纹理（使用Alpha作为遮罩）
                 float brushAlpha = SAMPLE_TEXTURE2D(_BrushTex, sampler_BrushTex, uvAtlas).a;
 
-                // 综合外层软化和纹理alpha
                 return brushAlpha * outerMask;
             }
-
 
             Varyings vert(Attributes v)
             {
                 Varyings o;
                 o.worldPos = mul(UNITY_MATRIX_M, v.vertex);
                 o.uv = v.uv;
+                
+                // 3. 转换模型法线到世界坐标系
+                o.normalWS = TransformObjectToWorldNormal(v.normal);
 
-                // 使用 UV 坐标构建覆盖整个渲染目标的全屏四边形
-                float4 uv = float4(0, 0, 0, 1);
+                float4 uv = float4(0, 0, 1, 1);
                 uv.xy = float2(1, _ProjectionParams.x) * (v.uv.xy * float2(2, 2) - float2(1, 1));
                 o.vertex = uv;
                 return o;
@@ -121,16 +124,13 @@ Shader "TNTC/TexturePainter_URP"
                     return half4(0, 0, 1, 1);
                 }
 
-                // 1. 计算笔刷局部UV和距离
-                float3 brushData = GetBrushLocalUV(i.worldPos.xyz, _PainterPosition, _Radius);
+                // 4. 将表面法线传入笔刷计算逻辑中
+                float3 brushData = GetBrushLocalUV(i.worldPos.xyz, _PainterPosition, _Radius, i.normalWS);
 
-                // 2. 获取笔刷遮罩强度
                 float brushStrength = EvaluateBrushMask(brushData.xy, brushData.z, _Hardness, _BrushIndex);
 
-                // 3. 结合绘制强度
                 float edge = brushStrength * _Strength;
 
-                // 4. 混合新旧颜色
                 half4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 return lerp(col, _PainterColor, edge);
             }
