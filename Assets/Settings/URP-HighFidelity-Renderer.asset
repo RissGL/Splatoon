@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   PassTag: RenderMetaballsScreenSpace
-  Event: 400
+  Event: 500
   FilterSettings:
     RenderQueueType: 1
     LayerMask:

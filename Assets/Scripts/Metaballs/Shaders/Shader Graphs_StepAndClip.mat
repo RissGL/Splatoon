@@ -8,7 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader Graphs_StepAndClip
-  m_Shader: {fileID: -6465566751694194690, guid: f68ffba8030502749b8eb867430ed4a1, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: f68ffba8030502749b8eb867430ed4a1,
+    type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -45,10 +46,10 @@ Material:
     - Vector1_c0765b0f9fbd45cc93f29b42dc9c50dd: 0
     - Vector1_dc4dddd7e6c04cb0b10ba5b78324fa22: 0
     - _AlphaStep: 0
-    - _AlphaStep2: 0.7
-    - _Clip: 0.903
+    - _AlphaStep2: 0.587
+    - _Clip: 0.9
     - _ColorStep: 0
-    - _ColorStep2: 0.404
+    - _ColorStep2: 0.4
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors: []
