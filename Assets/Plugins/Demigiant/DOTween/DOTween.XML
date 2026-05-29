@@ -733,7 +733,8 @@
             </param>
         </member>
         <member name="M:DG.Tweening.DOTween.Punch(DG.Tweening.Core.DOGetter{UnityEngine.Vector3},DG.Tweening.Core.DOSetter{UnityEngine.Vector3},UnityEngine.Vector3,System.Single,System.Int32,System.Single)">
-            <summary>Punches a Vector3 towards the given direction and then back to the starting one
+            <summary>Punches a Vector3 
+			the given direction and then back to the starting one
             as if it was connected to the starting position via an elastic.
             <para>This tween type generates some GC allocations at startup</para></summary>
             <param name="getter">A getter for the field or property to tween.

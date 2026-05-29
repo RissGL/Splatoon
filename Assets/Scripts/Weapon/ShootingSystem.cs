@@ -8,29 +8,43 @@ public class ShootingSystem
     private InputDataSo inputDataSo;
     private InkSystem inkSystem;
     private ParticleSystem particleSystem;
-    private Transform playerControllerTrans;
+    private Transform gunTrans;
+    private PlayerController playerController;
     private Transform splatGunNozzle;
 
     private bool wasShootInput=false;
     private CinemachineImpulseSource impulseSource;
 
     public ShootingSystem(InputDataSo inputDataSo, InkSystem inkSystem, ParticleSystem particleSystem,
-        Transform playerController,Transform splatGunNozzle)
+        PlayerController playerController,Transform splatGunNozzle,Transform gunTrans)
     {
         this.inputDataSo = inputDataSo;
         this.inkSystem = inkSystem;
         this.particleSystem = particleSystem;
-        this.playerControllerTrans = playerController;
+        this.gunTrans = gunTrans;
+        this.playerController = playerController;
         this.splatGunNozzle = splatGunNozzle;
-        impulseSource = playerControllerTrans.GetComponent<CinemachineImpulseSource>();
+        impulseSource = this.playerController.GetComponent<CinemachineImpulseSource>();
     }
 
     public void Update()
     {
+        if (inputDataSo == null)
+        {
+            Debug.Log("输入SO为空");
+            return;
+        }
+
+        if (inputDataSo.shootInput)
+        {
+            VisualPolish();
+        }
+
         if (inputDataSo.shootInput&&wasShootInput!=inputDataSo.shootInput)
         {
             wasShootInput = true;
             Shoot();
+            playerController.RotateToCamera();
         }
         else if (!inputDataSo.shootInput&&wasShootInput!=inputDataSo.shootInput)
         {
@@ -50,14 +64,14 @@ public class ShootingSystem
 
     private void VisualPolish() 
     {
-        if (!DOTween.IsTweening(playerControllerTrans))
+        if (!DOTween.IsTweening(gunTrans))
         {
-            playerControllerTrans.DOComplete();
+            gunTrans.DOComplete();
 
-            Vector3 localPosition=playerControllerTrans.localPosition;
+            Vector3 localPosition=gunTrans.localPosition;
 
-            playerControllerTrans.DOLocalMove(localPosition - new Vector3(0, 0, .2f), .03f)
-                .OnComplete(() => playerControllerTrans.DOLocalMove(localPosition, .1f).SetEase(Ease.OutSine));
+            gunTrans.DOLocalMove(localPosition - new Vector3(0, 0, .2f), .03f)
+                .OnComplete(() => gunTrans.DOLocalMove(localPosition, .1f).SetEase(Ease.OutSine));
 
             impulseSource.GenerateImpulse();
         }

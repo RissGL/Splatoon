@@ -53,6 +53,8 @@ public class RenderMetaballsScreenSpace : ScriptableRendererFeature
         {
             RenderTextureDescriptor blitTargetDescriptor = renderingData.cameraData.cameraTargetDescriptor;
 
+            blitTargetDescriptor.colorFormat = RenderTextureFormat.RFloat;
+
             _metaballDepthRTId = Shader.PropertyToID(MetaballDepthRTId);
             cmd.GetTemporaryRT(_metaballDepthRTId, blitTargetDescriptor);
             _metaballDepthRT = new RenderTargetIdentifier(_metaballDepthRTId);
@@ -220,7 +222,7 @@ public class RenderMetaballsScreenSpace : ScriptableRendererFeature
                 Blit(cmd, _metaballRT, _metaballRT2, _blurMaterial);
                 context.ExecuteCommandBuffer(cmd);
                 cmd.Clear();
-                
+
                 var tmpRT = _metaballRT;
                 _metaballRT = _metaballRT2;
                 _metaballRT2 = tmpRT;

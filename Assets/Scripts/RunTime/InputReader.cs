@@ -29,8 +29,16 @@ public class InputReader : MonoBehaviour
         inputActions.Player1.Squid.canceled += ctx => inputData.RaiseSquidToggle(false);
 
         // 射击输入：只触发事件，传递 true/false
-        inputActions.Player1.Shoot.performed += ctx => inputData.RaiseShootToggle(true);
-        inputActions.Player1.Shoot.canceled += ctx => inputData.RaiseShootToggle(false);
+        inputActions.Player1.Shoot.performed += ctx => 
+        {
+            inputData.RaiseShootToggle(true); 
+            inputData.SetShootInput(true); // 设置持续状态
+        };
+        inputActions.Player1.Shoot.canceled += ctx => 
+        {
+            inputData.RaiseShootToggle(false);
+            inputData.SetShootInput(false); // 设置持续状态
+        };
     }
 
     private void OnEnable()

@@ -31,6 +31,18 @@ public class PlayerController : MonoBehaviour
     private bool isSquidButtonHeld = false;
     private bool isShootButtonHeld = false;
 
+    private Camera mainCamera;
+
+    [Header("射击系统")]
+    [Label("主粒子")]
+    [SerializeField] private ParticleSystem shootParticleSystem;
+    [Label("枪口")]
+    [SerializeField] private Transform splatGunNozzle;
+    [Label("枪")]
+    [SerializeField] private Transform gun;
+    private CinemachineImpulseSource impulseSource;
+    private ShootingSystem shootingSystem;
+
     [Label("视角")]
     [SerializeField] private CameraInputAdapter cameraInputAdapter;
     private AimTargetController aimTargetController;
@@ -42,6 +54,8 @@ public class PlayerController : MonoBehaviour
         characterAppearance = new CharacterAppearance(transform, playerConfig,humanModel,squidModel);
         runtimeState = Instantiate(playerRuntimeStateTemp);
         inkSystem = new InkSystem(runtimeState);
+        impulseSource= GetComponent<CinemachineImpulseSource>();
+
 
         // 创建状态实例
         states = new Dictionary<PlayerMovementState, MoveStateBase>
@@ -86,6 +100,9 @@ public class PlayerController : MonoBehaviour
 
         ChangeToHuman();
 
+        shootingSystem = new ShootingSystem
+    (inputReader.inputData, inkSystem, shootParticleSystem, this, splatGunNozzle,gun);
+
         aimTargetController = GetComponent<AimTargetController>();
         aimTargetController.Initialize(inputReader.inputData);
     }
@@ -107,6 +124,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         moveSystem.Update(Time.deltaTime);
+
+        shootingSystem.Update();
 
         AutoCorrectState();
 
@@ -130,6 +149,20 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Auto-correcting to air state: " + airState);
                 ChangeState(airState);
             }
+        }
+    }
+
+    public void RotateToCamera() 
+    {
+        Vector3 target= new Vector3
+            (cameraTarget.transform.position.x, transform.position.y, cameraTarget.transform.position.z);
+
+        float rotateSpeed = 10f; // 旋转速度
+
+        if (target.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(target);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed);
         }
     }
 
