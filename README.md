@@ -1,5 +1,5 @@
-# 斯普拉顿-RissAR
-unity复刻斯普拉顿的游戏机制实验
+# 斯普拉顿
+unity尝试学习复刻斯普拉顿的游戏机制
 <br>
 思路来源：
 [cardosoandre](https://github.com/mixandjam/Splatoon-Ink?tab=License-1-ov-file)
