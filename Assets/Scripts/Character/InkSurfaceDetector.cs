@@ -43,9 +43,6 @@ hit.collider.name);
             return;
         }
 
-        if (hit.collider.name == lastGroundName && hasResult)
-            return;
-
         lastGroundName = hit.collider.name;
         hasResult = false;
 
@@ -71,7 +68,7 @@ hit.collider.name);
 
             IsOnAllyInk = Mathf.Abs(pixel.r - allyColor.r)
                         + Mathf.Abs(pixel.g - allyColor.g)
-                        + Mathf.Abs(pixel.b - allyColor.b) < 0.1f;
+                        + Mathf.Abs(pixel.b - allyColor.b) < 0.25f;
             Debug.Log($"InkSurfaceDetector: IsOnAllyInk={IsOnAllyInk}");
             hasResult = true;
         });

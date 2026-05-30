@@ -179,6 +179,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5959787338339742190}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &265974189 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7354468661167195145, guid: c3698e61840ef484cbc514f535ac945a,
+    type: 3}
+  m_PrefabInstance: {fileID: 577628718}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,6 +584,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1408236086366497910, guid: c3698e61840ef484cbc514f535ac945a,
         type: 3}
+      propertyPath: CollisionModule.collisionMessages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1408236086366497910, guid: c3698e61840ef484cbc514f535ac945a,
+        type: 3}
       propertyPath: InitialModule.startSpeed.minScalar
       value: 15
       objectReference: {fileID: 0}
@@ -590,6 +601,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5700724785329357354, guid: c3698e61840ef484cbc514f535ac945a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6443237165545394661, guid: c3698e61840ef484cbc514f535ac945a,
         type: 3}
@@ -664,7 +680,7 @@ PrefabInstance:
     - target: {fileID: 7014701236717347976, guid: c3698e61840ef484cbc514f535ac945a,
         type: 3}
       propertyPath: InitialModule.startSpeed.minScalar
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7014701236717347976, guid: c3698e61840ef484cbc514f535ac945a,
         type: 3}
@@ -686,6 +702,10 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7354468661167195145, guid: c3698e61840ef484cbc514f535ac945a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1984248814}
     - targetCorrespondingSourceObject: {fileID: 5700724785329357354, guid: c3698e61840ef484cbc514f535ac945a,
         type: 3}
       insertIndex: -1
@@ -889,6 +909,7 @@ MonoBehaviour:
   playerRuntimeStateTemp: {fileID: 11400000, guid: 4169d528baf009748b01896520f10d6c,
     type: 2}
   cameraTarget: {fileID: 1165963833}
+  inkData: {fileID: 11400000, guid: abe44e6bc21c3a04fbbeca5ac6a122af, type: 2}
   shootParticleSystem: {fileID: 1984248812}
   splatGunNozzle: {fileID: 739432310}
   gun: {fileID: 242954970}
@@ -1156,11 +1177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01c806ecb7f89541a36145d6e8036d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minRadius: 0.5
-  maxRadius: 0.7
-  strength: 0.5
-  hardness: 0.5
-  paintColor: {r: 1, g: 0.061911296, b: 0.058823526, a: 1}
+  inkData: {fileID: 0}
 --- !u!4 &1687642225 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5652746583314407580, guid: ad0ccb67adc0bde409605288a1f5a9a8,
@@ -1459,6 +1476,19 @@ ParticleSystem:
     type: 3}
   m_PrefabInstance: {fileID: 577628718}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1984248814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 265974189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d01c806ecb7f89541a36145d6e8036d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inkData: {fileID: 11400000, guid: abe44e6bc21c3a04fbbeca5ac6a122af, type: 2}
 --- !u!1 &2072593325
 GameObject:
   m_ObjectHideFlags: 0

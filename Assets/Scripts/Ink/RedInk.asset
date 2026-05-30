@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83012747ff9b5f245a8d4ff8e34d65c4, type: 3}
   m_Name: RedInk
   m_EditorClassIdentifier: 
+  minRadius: 1
+  maxRadius: 1.2
+  strength: 1
+  hardness: 1
+  inkColor: {r: 1, g: 0, b: 0, a: 1}

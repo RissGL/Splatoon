@@ -36,13 +36,13 @@ MonoBehaviour:
   - state: 4
     parameters:
       maxSpeed: 10
-      acceleration: 3
-      deceleration: 0.3
+      acceleration: 60
+      deceleration: 40
       gravityScale: 1
       jumpForce: 4
       canJump: 1
       airControl: 1
-      wallClimbSpeed: 0
+      wallClimbSpeed: 10
   - state: 5
     parameters:
       maxSpeed: 10

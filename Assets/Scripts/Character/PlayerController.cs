@@ -1,7 +1,10 @@
 using Cinemachine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.VersionControl.Asset;
+using ZGameFrameWork.Core;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -93,6 +96,8 @@ public class PlayerController : MonoBehaviour
         inputReader.inputData.OnSquidToggled += HandleSquidToggle;
         inputReader.inputData.OnShootToggled += HandleShootToggle;
 
+        EventCenter.AddEventListener<bool>((int)EventID.OnSquidDiveChange, ChangeSquidModel);
+
         moveSystem = new MoveSystem(inputReader.inputData, runtimeState,
             characterController,playerConfig.humanMovement,detector);
 
@@ -112,6 +117,29 @@ public class PlayerController : MonoBehaviour
         aimTargetController = GetComponent<AimTargetController>();
         aimTargetController.Initialize(inputReader.inputData);
     }
+
+    private void OnDisable()
+    {
+        EventCenter.RemoveEventListener<bool>((int)EventID.OnSquidDiveChange, ChangeSquidModel);
+    }
+
+    private void ChangeSquidModel(bool t) 
+    {
+        squidModel.SetActive(t);
+
+        StartCoroutine(CheckSquidModel());
+    }
+
+    private IEnumerator CheckSquidModel() 
+    {
+        yield return null;
+        if (currentState.stateType == PlayerMovementState.HumanRun ||
+    currentState.stateType == PlayerMovementState.HumanAir)
+        {
+            squidModel.SetActive(false);
+        }
+    }
+
     private void SetInitialState(PlayerMovementState state)
     {
         currentState = states[state];
@@ -161,19 +189,21 @@ public class PlayerController : MonoBehaviour
                 PlayerMovementState airState = runtimeState.isSquid ? PlayerMovementState.SquidAir : PlayerMovementState.HumanAir;
                 ChangeState(airState);
             }
-            if (state == PlayerMovementState.SquidFlop)
+        }
+
+        if (runtimeState.isSquid && inkSurfaceDetector != null)
+        {
+            inkSurfaceDetector.Update();
+
+            if (state == PlayerMovementState.SquidFlop &&
+    inkSurfaceDetector.IsOnAllyInk)
             {
-                if (inkSurfaceDetector != null && inkSurfaceDetector.IsOnAllyInk)
-                {
-                    ChangeState(PlayerMovementState.SquidDive);
-                }
+                ChangeState(PlayerMovementState.SquidDive);
             }
-             if (state == PlayerMovementState.SquidDive)
+            else if (state == PlayerMovementState.SquidDive &&
+    !inkSurfaceDetector.IsOnAllyInk)
             {
-                if (inkSurfaceDetector != null && !inkSurfaceDetector.IsOnAllyInk)
-                {
-                    ChangeState(PlayerMovementState.SquidFlop);
-                }
+                ChangeState(PlayerMovementState.SquidFlop);
             }
         }
     }
