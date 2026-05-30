@@ -80,11 +80,6 @@ public class PlayerController : MonoBehaviour
         detector = GetComponent<EnvironmentDetector>();
         detector.SetConfig(playerConfig.humanDetection);
         detector.SetController(characterController);
-        detector.OnEnteredAllyInk += HandleEnteredAllyInk;
-        detector.OnExitedAllyInk += HandleExitedAllyInk;
-        detector.OnWallDetected += HandleWallDetected;
-        detector.OnWallLost += HandleWallLost;
-
     }
 
     private void Start()
@@ -95,9 +90,6 @@ public class PlayerController : MonoBehaviour
         inputReader.inputData.OnJumpPressed += HandleJump;
         inputReader.inputData.OnSquidToggled += HandleSquidToggle;
         inputReader.inputData.OnShootToggled += HandleShootToggle;
-
-        EventCenter.AddEventListener<bool>((int)EventID.OnSquidDiveChange, ChangeSquidModel);
-
         moveSystem = new MoveSystem(inputReader.inputData, runtimeState,
             characterController,playerConfig.humanMovement,detector);
 
@@ -112,16 +104,12 @@ public class PlayerController : MonoBehaviour
 
         shootingSystem = new ShootingSystem
     (inputReader.inputData, inkSystem, shootParticleSystem, this, splatGunNozzle,gun);
-        inkSurfaceDetector = new InkSurfaceDetector(transform, inkData.inkColor);
+        inkSurfaceDetector = new InkSurfaceDetector(transform, inkData.inkColor,characterController);
 
         aimTargetController = GetComponent<AimTargetController>();
         aimTargetController.Initialize(inputReader.inputData);
     }
 
-    private void OnDisable()
-    {
-        EventCenter.RemoveEventListener<bool>((int)EventID.OnSquidDiveChange, ChangeSquidModel);
-    }
 
     private void ChangeSquidModel(bool t) 
     {
@@ -153,6 +141,11 @@ public class PlayerController : MonoBehaviour
         currentState = states[state];
         currentState.OnEnter(moveSystem);
         moveSystem.SetCurrentState(currentState);
+    }
+
+    public PlayerMovementState GetCurrentState() 
+    {
+        return currentState.stateType;
     }
 
     private void Update()
@@ -255,7 +248,6 @@ public class PlayerController : MonoBehaviour
         cameraTarget.transform.localPosition=physicsData.cameraTargetPosition;
     }
 
-    // ——— 事件处理 ———
     private void HandleJump()
     {
         var state = currentState.stateType;
@@ -374,7 +366,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ────────── 落地检测 ──────────
     private bool wasGroundedLastFrame = true;
 
     private void CheckLanding()
@@ -385,7 +376,6 @@ public class PlayerController : MonoBehaviour
 
         bool isFalling = moveSystem.VerticalVelocity <= 0.1f;
 
-        // 只要当前是空中状态，且碰到了地面，且没有在往天上飞，就强制落地
         if (isGrounded && isFalling
             && (currentState.stateType == PlayerMovementState.HumanAir
                 || currentState.stateType == PlayerMovementState.SquidAir))
@@ -412,7 +402,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ────────── 爬墙检测 ──────────
     private void CheckWallClimb()
     {
         if (detector == null || !runtimeState.isSquid) return;
@@ -442,13 +431,5 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    // ────────── 环境事件（预留）──────────
-    private void HandleEnteredAllyInk() { /* 后续实现 */ }
-    private void HandleExitedAllyInk() { /* 后续实现 */ }
-    private void HandleEnteredEnemyInk() { /* 后续实现 */ }
-    private void HandleExitedEnemyInk() { /* 后续实现 */ }
-    private void HandleWallDetected(Vector3 normal) { /* 后续实现 */ }
-    private void HandleWallLost() { /* 后续实现 */ }
 
 }

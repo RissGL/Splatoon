@@ -5,18 +5,20 @@ public class InkSurfaceDetector
 {
     private Transform playerTransform;
     private Color allyColor;
-    private float checkInterval = 0.15f;
+    private float checkInterval = 0.05f;
     private float lastCheckTime;
     private bool pending;
     private bool hasResult;
     private string lastGroundName;
+    private CharacterController characterController;
 
     public bool IsOnAllyInk { get; private set; }
 
-    public InkSurfaceDetector(Transform playerTransform, Color allyColor)
+    public InkSurfaceDetector(Transform playerTransform, Color allyColor,CharacterController characterController)
     {
         this.playerTransform = playerTransform;
         this.allyColor = allyColor;
+        this.characterController = characterController;
     }
 
     public void Update()
@@ -26,7 +28,7 @@ public class InkSurfaceDetector
 
         lastCheckTime = Time.time;
 
-        if (!Physics.Raycast(playerTransform.position, Vector3.down, out RaycastHit hit, 2f))
+        if (!Physics.Raycast(playerTransform.position + characterController.center, Vector3.down, out RaycastHit hit, 2f))
         {
             Debug.Log("InkSurfaceDetector: 没打到地面");
 
