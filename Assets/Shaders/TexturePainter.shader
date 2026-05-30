@@ -80,27 +80,32 @@ Shader "TNTC/TexturePainter_URP"
                 return float3(uvLocal, dist);
             }
 
-            float EvaluateBrushMask(float2 uvLocal, float dist, float hardness, float brushIndex)
-            {
-                float outerMask = 1.0 - smoothstep(1.0 - hardness * 0.5, 1.0 + 0.01, dist);
-                if (outerMask <= 0.0) return 0.0;
+           float EvaluateBrushMask(float2 uvLocal, float dist, float hardness, float brushIndex)
+{
 
-                const float cellsPerRow = 4.0;
-                const float cellsPerCol = 4.0;
-                float cellSizeX = 1.0 / cellsPerRow;
-                float cellSizeY = 1.0 / cellsPerCol;
+    if (uvLocal.x < 0.0 || uvLocal.x > 1.0 || uvLocal.y < 0.0 || uvLocal.y > 1.0)
+    {
+        return 0.0;
+    }
 
-                int idx = clamp((int)brushIndex, 0, 15);
-                int col = idx % (int)cellsPerRow;
-                int row = idx / (int)cellsPerRow;
+    const float cellsPerRow = 4.0;
+    const float cellsPerCol = 4.0;
+    float cellSizeX = 1.0 / cellsPerRow;
+    float cellSizeY = 1.0 / cellsPerCol;
 
-                float2 cellOffset = float2(col * cellSizeX, row * cellSizeY);
-                float2 uvAtlas = cellOffset + uvLocal * float2(cellSizeX, cellSizeY);
+    int idx = clamp((int)brushIndex, 0, 15);
+    int col = idx % (int)cellsPerRow;
+    int row = idx / (int)cellsPerRow;
 
-                float brushAlpha = SAMPLE_TEXTURE2D(_BrushTex, sampler_BrushTex, uvAtlas).a;
+    float2 cellOffset = float2(col * cellSizeX, row * cellSizeY);
+    float2 uvAtlas = cellOffset + uvLocal * float2(cellSizeX, cellSizeY);
 
-                return brushAlpha * outerMask;
-            }
+    float brushAlpha = SAMPLE_TEXTURE2D(_BrushTex, sampler_BrushTex, uvAtlas).r;
+
+    float outerMask = smoothstep(1.0, clamp(hardness, 0.0, 0.99), dist);
+
+    return brushAlpha * outerMask;
+}
 
             Varyings vert(Attributes v)
             {

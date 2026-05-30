@@ -8,13 +8,8 @@ public class InkParticles : MonoBehaviour
     private ParticleSystem particles;
     private List<ParticleCollisionEvent> collisionEvents;
 
-    [SerializeField] private float minRadius = 0.05f;
-    [SerializeField] private float maxRadius = 0.2f;
-    [SerializeField] private float strength = 1;
-    [SerializeField] private float hardness = 1;
 
-    [SerializeField] private Color paintColor;
-    
+    [SerializeField] private InkData inkData;
 
     private void Awake()
     {
@@ -24,7 +19,6 @@ public class InkParticles : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        Debug.Log("Á£×ÓÊÂ¼þ");
         int numCollisionEvents = particles.GetCollisionEvents(other, collisionEvents);
 
         Paintable p = other.GetComponent<Paintable>();
@@ -33,8 +27,8 @@ public class InkParticles : MonoBehaviour
             for (int i = 0; i < numCollisionEvents; i++)
             {
                 Vector3 pos = collisionEvents[i].intersection;
-                float radius = Random.Range(minRadius, maxRadius);
-                PaintManager.Instance.paint(p, pos, radius, hardness, strength, paintColor);
+                float radius = Random.Range(inkData.minRadius, inkData.maxRadius);
+                PaintManager.Instance.paint(p, pos, radius, inkData.hardness, inkData.strength, inkData.inkColor);
             }
         }
     }

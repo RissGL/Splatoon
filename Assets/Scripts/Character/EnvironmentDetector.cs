@@ -41,6 +41,10 @@ public class EnvironmentDetector : MonoBehaviour
     private float inkCheckCooldown = 0.2f;          // 检测间隔
     private float lastCheckTime;
 
+    public Vector2 GroundUV => groundHitValid ? groundHit.lightmapCoord :
+Vector2.zero;
+    public Paintable GroundPaintable => CurrentGround?.GetComponent<Paintable>();
+
     // 内部缓存，用于 Gizmos 绘制
     private RaycastHit groundHit;
     private RaycastHit wallHit;
@@ -244,6 +248,7 @@ public class EnvironmentDetector : MonoBehaviour
             IsOnAllyInk = false;
             IsOnEnemyInk = false;
         }
+
     }
 
     /// <summary>

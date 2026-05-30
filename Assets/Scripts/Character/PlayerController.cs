@@ -33,6 +33,11 @@ public class PlayerController : MonoBehaviour
 
     private Camera mainCamera;
 
+    private InkSurfaceDetector inkSurfaceDetector;
+
+    [Label("墨水")]
+    [SerializeField] private InkData inkData;
+
     [Header("射击系统")]
     [Label("主粒子")]
     [SerializeField] private ParticleSystem shootParticleSystem;
@@ -102,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
         shootingSystem = new ShootingSystem
     (inputReader.inputData, inkSystem, shootParticleSystem, this, splatGunNozzle,gun);
+        inkSurfaceDetector = new InkSurfaceDetector(transform, inkData.inkColor);
 
         aimTargetController = GetComponent<AimTargetController>();
         aimTargetController.Initialize(inputReader.inputData);
@@ -127,11 +133,18 @@ public class PlayerController : MonoBehaviour
 
         shootingSystem.Update();
 
+        inkSurfaceDetector.Update();
+
         AutoCorrectState();
 
         CheckLanding();
 
         CheckWallClimb();
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log("当前状态 " + currentState.stateType);
+        }
 
         currentAni.UpdateAnime(Time.deltaTime);
     }
@@ -146,8 +159,21 @@ public class PlayerController : MonoBehaviour
             if (detector != null && !detector.IsGrounded)
             {
                 PlayerMovementState airState = runtimeState.isSquid ? PlayerMovementState.SquidAir : PlayerMovementState.HumanAir;
-                Debug.Log("Auto-correcting to air state: " + airState);
                 ChangeState(airState);
+            }
+            if (state == PlayerMovementState.SquidFlop)
+            {
+                if (inkSurfaceDetector != null && inkSurfaceDetector.IsOnAllyInk)
+                {
+                    ChangeState(PlayerMovementState.SquidDive);
+                }
+            }
+             if (state == PlayerMovementState.SquidDive)
+            {
+                if (inkSurfaceDetector != null && !inkSurfaceDetector.IsOnAllyInk)
+                {
+                    ChangeState(PlayerMovementState.SquidFlop);
+                }
             }
         }
     }
@@ -208,13 +234,11 @@ public class PlayerController : MonoBehaviour
                               state == PlayerMovementState.SquidDive);
         if (!isGroundState) 
         {
-            Debug.Log("Jump pressed but not in a ground state: " + state);
             return;
         }
 
         if (detector == null || !detector.IsGrounded) return;
 
-        Debug.Log("Jump pressed in state: " + state);
         var p = moveSystem.GetParamsForState(currentState.stateType);
 
         if (!runtimeState.isSquid)
@@ -236,7 +260,11 @@ public class PlayerController : MonoBehaviour
         // 正在射击时不允许变乌贼
         if (isShootButtonHeld && pressed) return;
 
-        if (pressed) TryBecomeSquid();
+        if (pressed)
+        {
+            inkSurfaceDetector.ForceCheck();
+            TryBecomeSquid();
+        }
         else TryBecomeHuman();
     }
 
@@ -264,7 +292,7 @@ public class PlayerController : MonoBehaviour
         if (cur == PlayerMovementState.HumanRun)
         {
             ChangeToSquid();
-            if (detector != null && detector.IsOnAllyInk)
+            if (inkSurfaceDetector.IsOnAllyInk)
                 ChangeState(PlayerMovementState.SquidDive);
             else
                 ChangeState(PlayerMovementState.SquidFlop);
@@ -347,7 +375,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (st == PlayerMovementState.SquidAir)
         {
-            if (detector.IsOnAllyInk)
+            if (inkSurfaceDetector.IsOnAllyInk)
                 ChangeState(PlayerMovementState.SquidDive);
             else
                 ChangeState(PlayerMovementState.SquidFlop);
@@ -373,7 +401,7 @@ public class PlayerController : MonoBehaviour
         {
             if (detector.IsGrounded)
             {
-                if (detector.IsOnAllyInk)
+                if (inkSurfaceDetector.IsOnAllyInk)
                     ChangeState(PlayerMovementState.SquidDive);
                 else
                     ChangeState(PlayerMovementState.SquidFlop);
